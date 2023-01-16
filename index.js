@@ -40,5 +40,5 @@ const makeMessage = (today, dustItem) => {
     dustMessage = `${dustItem}の日です。忘れずに出して下さい。`;
   }
   
-  return `おはようございます。\n本日は${today.month}月${today.day}日、第${today.weekNum}${today.week}曜日です。\n${dustMessage}`;
+  return `おはようございます。\n本日は${today.month}月${today.day}日、第${today.count}${today.week}曜日です。\n${dustMessage}`;
 };
