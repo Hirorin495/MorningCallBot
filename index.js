@@ -1,11 +1,10 @@
-// LINE BOT SDKを用意する
+// 外部ファイル読み込み
 const LINE = require('@line/bot-sdk');
 const DUST = require('./libs/dust.js');
 
 /**
  * LINEメッセージ送信Lambda関数
  * @param {*} event
- * @returns
  */
 exports.handler = async (event) => {
   // アクセストークンとユーザーIDを設定する
@@ -17,9 +16,9 @@ exports.handler = async (event) => {
     channelAccessToken: LINE_ACCESS_TOKEN
   });
   
+  // 出せるごみの情報を取得
   const today = DUST.getToday();
   const dustItem = DUST.getDustSchedule(today.weekNum, today.count);
-  
   
   // メッセージ設定
   event['text'] = makeMessage(today, dustItem);
@@ -29,6 +28,12 @@ exports.handler = async (event) => {
   await client.pushMessage(LINE_USER_ID, message);
 };
 
+/**
+ * LINEでの送信メッセージを作成する
+ * @param {object} today 
+ * @param {string | null} dustItem 
+ * @returns 送信メッセージ
+ */
 const makeMessage = (today, dustItem) => {
   let dustMessage = "今日出せるごみはないようですね。";
   if (dustItem) {
