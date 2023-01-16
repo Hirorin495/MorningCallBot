@@ -1,10 +1,10 @@
-// LINE BOT SDKを用意する
+// 外部ファイル読み込み
 const LINE = require('@line/bot-sdk');
+const DUST = require('./libs/dust.js');
 
 /**
  * LINEメッセージ送信Lambda関数
  * @param {*} event
- * @returns
  */
 exports.handler = async (event) => {
   // アクセストークンとユーザーIDを設定する
@@ -16,23 +16,29 @@ exports.handler = async (event) => {
     channelAccessToken: LINE_ACCESS_TOKEN
   });
   
-  // メッセージ設定
-  event['text'] = makeMessage();
+  // 出せるごみの情報を取得
+  const today = DUST.getToday();
+  const dustItem = DUST.getDustSchedule(today.weekNum, today.count);
   
+  // メッセージ設定
+  event['text'] = makeMessage(today, dustItem);
 
   // 引数eventをmessageに詰めて送信する
   const message = event;
   await client.pushMessage(LINE_USER_ID, message);
 };
 
-const makeMessage = () => {
-    //月・日・曜日を取得する
-    const today = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
-    const month = today.getMonth()+1;
-    const day = today.getDate();
-    const week = today.getDay();
-
-    const yobi= new Array("日","月","火","水","木","金","土");
-    
-    return `おはようございます。\n本日は${month}月${day}日${yobi[week]}曜日です。\n今日も頑張りましょう。`;
+/**
+ * LINEでの送信メッセージを作成する
+ * @param {object} today 
+ * @param {string | null} dustItem 
+ * @returns 送信メッセージ
+ */
+const makeMessage = (today, dustItem) => {
+  let dustMessage = "今日出せるごみはないようですね。";
+  if (dustItem) {
+    dustMessage = `${dustItem}の日です。忘れずに出して下さい。`;
+  }
+  
+  return `おはようございます。\n本日は${today.month}月${today.day}日、第${today.weekNum}${today.week}曜日です。\n${dustMessage}`;
 };

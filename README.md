@@ -12,8 +12,8 @@ AWS Lambdaで動作するモーニングコールLINEbotです。
 
 ## 環境変数
 
-|  Key  | Value |
-| --- | --- |
-|  LINE_ACCESS_TOKEN   |  LINEbotのアクセストークン   |
-|  LINE_USER_ID   |  LINEのユーザID   |
-
+| Key               | Value            |
+| ----------------- | ---------------- |
+| LINE_ACCESS_TOKEN | LINEbotのアクセストークン |
+| LINE_USER_ID      | LINEのユーザID       |
+| TZ                | Asia/Tokyo       |
